@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">DogCEOChallenge</string>
+    <string name="breed_list">Breed list</string>
+    <string name="image_list">Image list</string>
+</resources>

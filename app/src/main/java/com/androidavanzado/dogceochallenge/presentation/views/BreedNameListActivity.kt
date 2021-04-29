@@ -1,28 +1,32 @@
-package com.androidavanzado.dogceochallenge.views
+package com.androidavanzado.dogceochallenge.presentation.views
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider.*
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
 import com.androidavanzado.dogceochallenge.R
-import com.androidavanzado.dogceochallenge.adapter.BreedNameAdapter
-import com.androidavanzado.dogceochallenge.viewmodels.BreedNameListActivityViewModel
+import com.androidavanzado.dogceochallenge.di.Injection
+import com.androidavanzado.dogceochallenge.presentation.adapter.BreedNameAdapter
+import com.androidavanzado.dogceochallenge.presentation.viewmodel.BreedNameListActivityViewModel
+import com.androidavanzado.dogceochallenge.presentation.viewmodel.BreedNameViewModelFactory
 
 class BreedNameListActivity : AppCompatActivity(), OnItemClickListener {
 
     private lateinit var breedNameAdapter: BreedNameAdapter
+    private lateinit var viewModel: BreedNameListActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_breed_name_list)
 
         initRecyclerView()
-        createData()
+        setupViewModel()
     }
 
     private fun initRecyclerView(){
@@ -38,10 +42,11 @@ class BreedNameListActivity : AppCompatActivity(), OnItemClickListener {
         }
     }
 
-    private fun createData(){
+    private fun setupViewModel(){
+        viewModel = ViewModelProviders.of(this, BreedNameViewModelFactory(Injection.providerBreedNameRepository()))
+            .get(BreedNameListActivityViewModel::class.java)
 
-        val viewModel = ViewModelProvider.AndroidViewModelFactory(application).create(BreedNameListActivityViewModel::class.java)
-        viewModel.getListDataObserver().observe(this, {
+        viewModel.breedListData.observe(this,{
             if(it != null){
                 breedNameAdapter.setListData(it,this@BreedNameListActivity)
                 breedNameAdapter.notifyDataSetChanged()
@@ -51,7 +56,7 @@ class BreedNameListActivity : AppCompatActivity(), OnItemClickListener {
             }
         })
 
-        viewModel.makeApiCall()
+        viewModel.getData()
     }
 
     override fun onItemClickListener(breedName: String) {

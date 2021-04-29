@@ -1,4 +1,4 @@
-package com.androidavanzado.dogceochallenge.adapter
+package com.androidavanzado.dogceochallenge.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +7,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.androidavanzado.dogceochallenge.R
 import com.bumptech.glide.Glide
+import java.util.*
 
 class BreedImageAdapter :  RecyclerView.Adapter<BreedImageAdapter.MyViewHolder>() {
 

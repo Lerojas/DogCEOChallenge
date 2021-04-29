@@ -1,4 +1,4 @@
-package com.androidavanzado.dogceochallenge.adapter
+package com.androidavanzado.dogceochallenge.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.androidavanzado.dogceochallenge.R
-import com.androidavanzado.dogceochallenge.views.OnItemClickListener
+import com.androidavanzado.dogceochallenge.presentation.views.OnItemClickListener
 
 class BreedNameAdapter : RecyclerView.Adapter<BreedNameAdapter.MyViewHolder>() {
 
@@ -25,9 +25,9 @@ class BreedNameAdapter : RecyclerView.Adapter<BreedNameAdapter.MyViewHolder>() {
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.breedNameTv.text = breedNames[position]
-        holder.itemView.setOnClickListener(View.OnClickListener {
+        holder.itemView.setOnClickListener {
             onItemClickListener.onItemClickListener(breedNames[position])
-        })
+        }
     }
 
     override fun getItemCount(): Int {

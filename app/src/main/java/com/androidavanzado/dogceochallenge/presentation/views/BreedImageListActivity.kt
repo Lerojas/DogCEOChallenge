@@ -1,20 +1,23 @@
-package com.androidavanzado.dogceochallenge.views
+package com.androidavanzado.dogceochallenge.presentation.views
 
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.androidavanzado.dogceochallenge.R
-import com.androidavanzado.dogceochallenge.adapter.BreedImageAdapter
-import com.androidavanzado.dogceochallenge.viewmodels.BreedImageListActivityViewModel
+import com.androidavanzado.dogceochallenge.di.Injection
+import com.androidavanzado.dogceochallenge.presentation.adapter.BreedImageAdapter
+import com.androidavanzado.dogceochallenge.presentation.viewmodel.BreedImageListActivityViewModel
+import com.androidavanzado.dogceochallenge.presentation.viewmodel.BreedImageViewModelFactory
 
 class BreedImageListActivity : AppCompatActivity() {
 
-    lateinit var breedImageAdapter: BreedImageAdapter
+    private lateinit var breedImageAdapter: BreedImageAdapter
+    private lateinit var viewModel : BreedImageListActivityViewModel
     private lateinit var breedName : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +27,7 @@ class BreedImageListActivity : AppCompatActivity() {
         breedName = intent.getStringExtra("breedName").toString()
 
         initRecyclerView()
-        createData()
+        setupViewModel()
     }
 
     private fun initRecyclerView(){
@@ -40,11 +43,11 @@ class BreedImageListActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupViewModel(){
+        viewModel = ViewModelProviders.of(this, BreedImageViewModelFactory(Injection.providerBreedImageRepository()))
+            .get(BreedImageListActivityViewModel::class.java)
 
-    private fun createData(){
-
-        val viewModel = ViewModelProvider.AndroidViewModelFactory(application).create(BreedImageListActivityViewModel::class.java)
-        viewModel.getListDataObserver().observe(this, {
+        viewModel.breedListData.observe(this,{
             if(it != null){
                 breedImageAdapter.setListData(it)
                 breedImageAdapter.notifyDataSetChanged()
@@ -54,6 +57,6 @@ class BreedImageListActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.makeApiCall(breedName)
+        viewModel.getData(breedName)
     }
 }

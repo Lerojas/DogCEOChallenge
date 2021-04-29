@@ -1,4 +1,4 @@
-package com.androidavanzado.dogceochallenge.network
+package com.androidavanzado.dogceochallenge.data.network
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
